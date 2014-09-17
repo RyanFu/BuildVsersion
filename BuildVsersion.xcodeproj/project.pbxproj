@@ -53,6 +53,7 @@
 		84C7ED2F19C9E9B9003DD7C1 /* BuildVsersionTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BuildVsersionTests-Info.plist"; sourceTree = "<group>"; };
 		84C7ED3119C9E9B9003DD7C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84C7ED3319C9E9B9003DD7C1 /* BuildVsersionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BuildVsersionTests.m; sourceTree = "<group>"; };
+		84C7ED3E19C9EDCA003DD7C1 /* InfoPlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoPlist.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +129,7 @@
 			children = (
 				84C7ED1019C9E9B8003DD7C1 /* BuildVsersion-Info.plist */,
 				84C7ED1119C9E9B8003DD7C1 /* InfoPlist.strings */,
+				84C7ED3E19C9EDCA003DD7C1 /* InfoPlist.h */,
 				84C7ED1419C9E9B8003DD7C1 /* main.m */,
 				84C7ED1619C9E9B9003DD7C1 /* BuildVsersion-Prefix.pch */,
 			);
@@ -162,6 +164,7 @@
 				84C7ED0119C9E9B8003DD7C1 /* Sources */,
 				84C7ED0219C9E9B8003DD7C1 /* Frameworks */,
 				84C7ED0319C9E9B8003DD7C1 /* Resources */,
+				84C7ED3D19C9EC3C003DD7C1 /* GenGitVersion */,
 			);
 			buildRules = (
 			);
@@ -244,6 +247,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		84C7ED3D19C9EC3C003DD7C1 /* GenGitVersion */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = GenGitVersion;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "git=/usr/local/git/bin/git\nversion=`$git describe`\necho \"#define GIT_VERSION $version\" > InfoPlist.h\ntouch Info.plist";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84C7ED0119C9E9B8003DD7C1 /* Sources */ = {
@@ -380,6 +400,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BuildVsersion/BuildVsersion-Prefix.pch";
 				INFOPLIST_FILE = "BuildVsersion/BuildVsersion-Info.plist";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -393,6 +415,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BuildVsersion/BuildVsersion-Prefix.pch";
 				INFOPLIST_FILE = "BuildVsersion/BuildVsersion-Info.plist";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -22,3 +22,8 @@ Key 都在字典 [[NSBundle mainBundle] infoDictionary] 中。
 
 #ToDo：
 由于对Shell不熟，Version的计数为整数不存在 x.x.x 的情况，于实际需求不符。
+
+参考内容:
+http://joeyio.com/ios/2013/05/25/xcode-version-management/
+http://www.cnblogs.com/tinkl/p/3723638.html
+http://blog.jaredsinclair.com/post/97193356620/the-best-of-all-possible-xcode-automated-build

@@ -53,7 +53,6 @@
 		84C7ED2F19C9E9B9003DD7C1 /* BuildVsersionTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BuildVsersionTests-Info.plist"; sourceTree = "<group>"; };
 		84C7ED3119C9E9B9003DD7C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84C7ED3319C9E9B9003DD7C1 /* BuildVsersionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BuildVsersionTests.m; sourceTree = "<group>"; };
-		84C7ED3E19C9EDCA003DD7C1 /* InfoPlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoPlist.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +128,6 @@
 			children = (
 				84C7ED1019C9E9B8003DD7C1 /* BuildVsersion-Info.plist */,
 				84C7ED1119C9E9B8003DD7C1 /* InfoPlist.strings */,
-				84C7ED3E19C9EDCA003DD7C1 /* InfoPlist.h */,
 				84C7ED1419C9E9B8003DD7C1 /* main.m */,
 				84C7ED1619C9E9B9003DD7C1 /* BuildVsersion-Prefix.pch */,
 			);
@@ -164,7 +162,7 @@
 				84C7ED0119C9E9B8003DD7C1 /* Sources */,
 				84C7ED0219C9E9B8003DD7C1 /* Frameworks */,
 				84C7ED0319C9E9B8003DD7C1 /* Resources */,
-				84C7ED3D19C9EC3C003DD7C1 /* GenGitVersion */,
+				84C7ED4519CAC459003DD7C1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -249,19 +247,18 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		84C7ED3D19C9EC3C003DD7C1 /* GenGitVersion */ = {
+		84C7ED4519CAC459003DD7C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = GenGitVersion;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "git=/usr/local/git/bin/git\nversion=`$git describe`\necho \"#define GIT_VERSION $version\" > InfoPlist.h\ntouch Info.plist";
+			shellPath = /bin/bash;
+			shellScript = "#\n# Set the build number to the current git commit count.\n# If we're using the Dev scheme, then we'll suffix the build\n# number with the current branch name, to make collisions\n# far less likely across feature branches.\n# Based on: http://w3facility.info/question/how-do-i-force-xcode-to-rebuild-the-info-plist-file-in-my-project-every-time-i-build-the-project/\n#\ngit=`sh /etc/profile; which git`\nappBuild=`\"$git\" rev-list --all |wc -l`\nif [ $CONFIGURATION = \"Debug\" ]; then\nbranchName=`\"$git\" rev-parse --abbrev-ref HEAD`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild-$branchName\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\necho \"Updated ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -400,8 +397,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BuildVsersion/BuildVsersion-Prefix.pch";
 				INFOPLIST_FILE = "BuildVsersion/BuildVsersion-Info.plist";
-				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
-				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -415,8 +412,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BuildVsersion/BuildVsersion-Prefix.pch";
 				INFOPLIST_FILE = "BuildVsersion/BuildVsersion-Info.plist";
-				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
-				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -273,8 +273,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "if [ $CONFIGURATION == Release ]; then\necho \"Bumping build number...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n#increment the build number (ie 115 to 116)\nversionnum=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${plist}\")\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No build number in $plist\"\nexit 2\nfi\nversionnum=$(expr $versionnum + 1)\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $versionnum\" \"${plist}\"\necho \"Bumped build number to $versionnum\"\nelse\necho $CONFIGURATION \" build - Not bumping build number.\"\nfi";
+			shellPath = /bin/sh;
+			shellScript = "if [ $CONFIGURATION == Release ]; then\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber +\n1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\nelse\n    echo $CONFIGURATION \" build - Not bumping build number.\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

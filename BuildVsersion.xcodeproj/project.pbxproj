@@ -162,7 +162,8 @@
 				84C7ED0119C9E9B8003DD7C1 /* Sources */,
 				84C7ED0219C9E9B8003DD7C1 /* Frameworks */,
 				84C7ED0319C9E9B8003DD7C1 /* Resources */,
-				84C7ED4519CAC459003DD7C1 /* ShellScript */,
+				84C7ED4519CAC459003DD7C1 /* xcode-build-bump.sh */,
+				84C7ED4619CAC74A003DD7C1 /* xcode-version-bump.sh */,
 			);
 			buildRules = (
 			);
@@ -247,18 +248,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		84C7ED4519CAC459003DD7C1 /* ShellScript */ = {
+		84C7ED4519CAC459003DD7C1 /* xcode-build-bump.sh */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "xcode-build-bump.sh";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "#\n# Set the build number to the current git commit count.\n# If we're using the Dev scheme, then we'll suffix the build\n# number with the current branch name, to make collisions\n# far less likely across feature branches.\n# Based on: http://w3facility.info/question/how-do-i-force-xcode-to-rebuild-the-info-plist-file-in-my-project-every-time-i-build-the-project/\n#\ngit=`sh /etc/profile; which git`\nappBuild=`\"$git\" rev-list --all |wc -l`\nif [ $CONFIGURATION = \"Debug\" ]; then\nbranchName=`\"$git\" rev-parse --abbrev-ref HEAD`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild-$branchName\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\necho \"Updated ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"";
+		};
+		84C7ED4619CAC74A003DD7C1 /* xcode-version-bump.sh */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "xcode-version-bump.sh";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [ $CONFIGURATION == Release ]; then\necho \"Bumping build number...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n#increment the build number (ie 115 to 116)\nversionnum=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${plist}\")\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No build number in $plist\"\nexit 2\nfi\nversionnum=$(expr $versionnum + 1)\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $versionnum\" \"${plist}\"\necho \"Bumped build number to $versionnum\"\nelse\necho $CONFIGURATION \" build - Not bumping build number.\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

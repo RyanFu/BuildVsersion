@@ -35,7 +35,7 @@
     NSString *version = [self bundleShortVersionString];
     NSString *build = [self  bundleBuildVersionString];
     
-    return F(@"%@(%@)", version, build);
+    return F(@"%@   build:%@", version, build);
 }
 - (void)viewDidLoad
 {
@@ -44,8 +44,8 @@
     
     self.version.text = F(@"version %@",[self bundleFullVersionString]);
     id value =  [[NSBundle mainBundle] infoDictionary];
-    NSString *version = [value objectForKey:(NSString *)kCFBundleVersionKey];
-    NSString *build = [value objectForKey:@"CFBundleShortVersionString"];
+    NSString *build = [value objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *version = [value objectForKey:@"CFBundleShortVersionString"];
     NSLog(@"version: %@ build: %@",version,build);
 }
 
